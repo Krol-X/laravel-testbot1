@@ -21,3 +21,8 @@ Route::get('/', function () {
 Route::get('/test', function () {
     return Inertia::render('Test', ['user' => 'You']);
 });
+
+Route::get('/tg-users', function () {
+    return Inertia::render('TgUsers');
+});
+

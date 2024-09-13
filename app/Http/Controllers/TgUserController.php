@@ -18,7 +18,7 @@ class TgUserController extends Controller
             'created_at' => $it['created_at']
         ]);
         return response()->json([
-            'status' => 'ok',
+            'ok' => true,
             'data' => $resp
         ]);
     }

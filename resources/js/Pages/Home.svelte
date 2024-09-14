@@ -2,12 +2,9 @@
   import {layout, title} from '../Layouts/Layout.svelte'
 </script>
 <script>
-  $layout = null
-  $title = 'Home'
-
-  let user = "User";
+  $title = 'Home page'
 </script>
 
 <div>
-  <h1>Hello {user}!</h1>
+  Welcome to the `bot1` admin panel!
 </div>

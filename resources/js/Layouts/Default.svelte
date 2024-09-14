@@ -2,8 +2,8 @@
   import Menu from './Components/Menu.svelte'
 </script>
 
-<h1>Default layout</h1>
 <Menu/>
-<div>
+
+<div class="container mt-4">
   <slot/>
 </div>

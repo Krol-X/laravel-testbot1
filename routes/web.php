@@ -18,11 +18,6 @@ Route::get('/', function () {
     return Inertia::render('Home');
 });
 
-Route::get('/test', function () {
-    return Inertia::render('Test', ['user' => 'You']);
-});
-
 Route::get('/tg-users', function () {
     return Inertia::render('TgUsers');
 });
-

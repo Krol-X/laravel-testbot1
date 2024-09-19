@@ -38,4 +38,4 @@ COPY . .
 EXPOSE 80 443
 
 # Запуск Nginx и cron
-CMD ["sh", "-c", "certbot --nginx --non-interactive --agree-tos --register-unsafely-without-email --redirect --no-eff-email -d $DOMAIN -v && cron && nginx -g 'daemon off;'"]
+CMD ["sh", "-c", "nginx -g 'daemon off;'"]

@@ -1,41 +1,67 @@
-# Stage 1: PHP 8.2 with Composer and other dependencies
-FROM php:8.2-fpm AS php
+FROM php:8.2-fpm-alpine AS php
 
-# Установка необходимых пакетов
-RUN apt-get update && apt-get install -y \
-    libjpeg-dev libpng-dev libfreetype6-dev zip unzip git curl libonig-dev \
-    libxml2-dev libzip-dev libssl-dev cron \
+RUN apk add --no-cache \
+    curl git build-base zlib-dev oniguruma-dev autoconf bash
+    libjpeg-dev libpng-dev libfreetype6-dev zip unzip libonig-dev \
+    libxml2-dev libzip-dev libssl-dev libpq-dev cron \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_mysql mbstring zip exif pcntl bcmath
+    && docker-php-ext-install gd pdo pdo_pgsql mbstring zip exif pcntl bcmath
+RUN apk add --update linux-headers
 
-# Установка Composer
+# Xdebug
+ARG INSTALL_XDEBUG=false
+RUN if [ ${INSTALL_XDEBUG} = true ]; \
+    then \
+      pecl install xdebug && docker-php-ext-enable xdebug; \
+    fi;
+COPY ./docker/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+
+# Redis
+RUN apk add --no-cache $PHPIZE_DEPS \
+    && pecl install redis \
+    && docker-php-ext-enable redis
+
+# Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Копирование crontab
-COPY ./docker/crontab /etc/cron.d/cert-renew
-RUN chmod 0644 /etc/cron.d/cert-renew && crontab /etc/cron.d/cert-renew
 
-# Stage 2: Nginx with Certbot
-FROM nginx:latest
 
-# Установка Certbot
-RUN apt-get update && apt-get install -y certbot python3-certbot-nginx cron
-
-# Копирование конфигурации Nginx
+# Nginx
+RUN apk add --update --no-cache nginx
 COPY ./docker/nginx/default.conf.template /etc/nginx/templates/default.conf
+RUN chown -Rf www-data:www-data /var/lib/nginx
 
-# Копирование crontab для обновления сертификатов
-COPY --from=php /etc/cron.d/cert-renew /etc/cron.d/cert-renew
-RUN chmod 0644 /etc/cron.d/cert-renew
+# Certbot
+# RUN apk add --no-cache certbot python3-certbot-nginx
 
-# Настройка рабочей директории
+# Crontab
+# COPY ./docker/crontab /etc/cron.d/cert-renew
+# RUN chmod 0644 /etc/cron.d/cert-renew && crontab /etc/cron.d/cert-renew
+
+# COPY --from=php /etc/cron.d/cert-renew /etc/cron.d/cert-renew
+# RUN chmod 0644 /etc/cron.d/cert-renew
+
+# Supervisor
+RUN apk add --no-cache supervisor
+COPY ./docker/supervisord.conf /etc/supervisord.conf
+
+# Source code
+RUN chown www-data:www-data /var/www
+COPY --chown=www-data:www-data ./ /var/www
 WORKDIR /var/www
 
-# Копируем проект
-COPY . .
+# Install dependencies
+ARG BUILD_MODE=dev
+RUN if [ ${BUILD_MODE} = dev ]; \
+    then \
+      composer install; \
+    else \
+      composer install --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader; \
+    fi;
+RUN chown -R www-data:www-data /var/www/vendor/
 
-# Открываем порты
-EXPOSE 80 443
 
-# Запуск Nginx и cron
-CMD ["sh", "-c", "nginx -g 'daemon off;'"]
+
+EXPOSE 8080
+
+CMD ["/bin/sh", "./docker/run.sh"]

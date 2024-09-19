@@ -1,11 +1,6 @@
 FROM php:8.2-fpm-alpine AS php
 
-RUN apk add --no-cache \
-    curl git build-base zlib-dev oniguruma-dev autoconf bash
-    libjpeg-dev libpng-dev libfreetype6-dev zip unzip libonig-dev \
-    libxml2-dev libzip-dev libssl-dev libpq-dev cron \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_pgsql mbstring zip exif pcntl bcmath
+RUN apk add --no-cache curl git build-base zlib-dev oniguruma-dev autoconf bash
 RUN apk add --update linux-headers
 
 # Xdebug
@@ -15,6 +10,9 @@ RUN if [ ${INSTALL_XDEBUG} = true ]; \
       pecl install xdebug && docker-php-ext-enable xdebug; \
     fi;
 COPY ./docker/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+
+# Postgres
+RUN apk add --no-cache libpq-dev && docker-php-ext-install pdo_pgsql  
 
 # Redis
 RUN apk add --no-cache $PHPIZE_DEPS \

@@ -19,10 +19,10 @@ RUN chmod 0644 /etc/cron.d/cert-renew && crontab /etc/cron.d/cert-renew
 FROM nginx:latest
 
 # Установка Certbot
-RUN apt-get update && apt-get install -y certbot python3-certbot-nginx cron
+RUN apt-get update && apt-get install -y certbot python3-certbot-nginx cron gettext
 
 # Копирование конфигурации Nginx
-COPY ./docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+envsubst '$DOMAIN' < ./docker/nginx/default.conf.template > /etc/nginx/conf.d/default.conf
 
 # Копирование crontab для обновления сертификатов
 COPY --from=php /etc/cron.d/cert-renew /etc/cron.d/cert-renew

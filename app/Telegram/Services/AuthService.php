@@ -2,6 +2,7 @@
 
 namespace App\Telegram\Services;
 
+use App\Models\TgUser;
 use App\Services\TgUserService;
 use SergiX44\Nutgram\Nutgram;
 
@@ -13,10 +14,11 @@ class AuthService
     {
     }
 
-    public function authUser(Nutgram $bot): int
+    public function authUser(Nutgram $bot): TgUser
     {
-        $user_id = $bot->userId();
-        $this->tg_user_service->createOrFind($user_id);
-        return $user_id;
+        $user_data = $bot->user();
+
+        $user = $this->tg_user_service->createOrFind($user_data);
+        return $user;
     }
 }

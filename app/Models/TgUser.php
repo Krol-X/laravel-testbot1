@@ -12,6 +12,9 @@ class TgUser extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'id'
+        'id',
+        'firstname',
+        'lastname',
+        'username'
     ];
 }

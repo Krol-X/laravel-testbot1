@@ -15,7 +15,7 @@ class StartCommand
 
     public function __invoke(Nutgram $bot): void
     {
-        $id = $this->auth_service->authUser($bot);
-        $bot->sendMessage("Your id: {$id}");
+        $user = $this->auth_service->authUser($bot);
+        $bot->sendMessage("{$user->firstname} {$user->lastname} ({$user->username}) your id: {$user->id}");
     }
 }

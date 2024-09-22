@@ -10,10 +10,8 @@
   async function loadUsers() {
     is_loading = true;
     try {
-      const response = await api_v1.tg_user.list();
-      if (response?.ok) {
-        users = response?.data ?? [];
-      }
+      const response = await api_v1.tg_user.index();
+      users = response?.data ?? [];
     } catch (err) {
       console.log(`Loading error: ${err}`);
     }

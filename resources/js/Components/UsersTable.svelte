@@ -13,6 +13,9 @@
       <thead>
       <tr>
         <th>ID</th>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Тэг</th>
         <th>Дата создания</th>
       </tr>
       </thead>
@@ -20,6 +23,9 @@
       {#each users as user}
         <tr>
           <td>{user['id']}</td>
+          <td>{user['firstname']}</td>
+          <td>{user['lastname']}</td>
+          <td>{user['username']}</td>
           <td>{new Date(user['created_at']).toLocaleString()}</td>
         </tr>
       {/each}

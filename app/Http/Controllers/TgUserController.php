@@ -13,7 +13,8 @@ class TgUserController extends Controller
 {
     public function index()
     {
-        return new TgUserCollection(TgUser::paginate(10));
+        // TgUser::paginate(10)
+        return new TgUserCollection(TgUser::all());
     }
 
     public function store(Request $request)

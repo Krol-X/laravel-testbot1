@@ -9,6 +9,8 @@
   export let users = [];
   export let is_loading = false;
 
+  export let deleteUser
+
   function onTBodyClick(e) {
     if (e.target.tagName === 'TD' &&
       !e.target.closest('td').classList.contains('actions')
@@ -43,13 +45,13 @@
            a11y-no-noninteractive-element-interactions -->
       <tbody on:click={onTBodyClick} class:editable={is_editable}>
       {#each users as user}
-        <tr>
+        <tr data-id={user['id']}>
           <td>{user['id']}</td>
           <td>{user['firstname']}</td>
           <td>{user['lastname']}</td>
           <td>{user['username']}</td>
           <td>{new Date(user['created_at']).toLocaleString()}</td>
-          <td class="actions" data-id={user['id']}>
+          <td class="actions">
             <div class='actions-buttons'>
               <Button
                 class="actions-button"
@@ -60,6 +62,7 @@
               <Button
                 class="actions-button"
                 color="none"
+                on:click={(e) => deleteUser(e.target?.closest('tr')?.dataset?.id)}
               >
                 <MaterialIcon type="remove" />
               </Button>
@@ -94,7 +97,10 @@
     justify-content: center;
     align-items: center;
     padding: 0;
-    width: 24px; height: 24px;
+    width: 26px; height: 26px;
+  }
+  :global(.actions-button:hover) {
+    border: thin solid black;
   }
   :global(.actions-button svg) {
     width: auto; height: 80%;

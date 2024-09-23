@@ -18,6 +18,13 @@
     is_loading = false;
   }
 
+  async function deleteUser(id) {
+    if (id) {
+      await api_v1.tg_user.delete(id);
+      users = users.filter(it => it.id === id)
+    }
+  }
+
   onMount(async () => {
     await loadUsers();
   });
@@ -28,7 +35,7 @@
   on:click={loadUsers}
   color="secondary"
   outline={true}
-  children="Refresh"
+  children="Обновить"
 />
 
-<UsersTable {users} {is_loading} />
+<UsersTable {users} {is_loading} {deleteUser} />

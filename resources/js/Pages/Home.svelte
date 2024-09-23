@@ -1,5 +1,5 @@
 <script context="module">
-  import {layout, title} from '../Layouts/Layout.svelte'
+  import {title} from '@/Layouts/Layout.svelte'
 </script>
 <script>
   $title = 'Home page'

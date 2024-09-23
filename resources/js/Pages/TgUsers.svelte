@@ -28,6 +28,7 @@
   on:click={loadUsers}
   color="secondary"
   outline={true}
-  children="Refresh"/>
+  children="Refresh"
+/>
 
 <UsersTable {users} {is_loading} />

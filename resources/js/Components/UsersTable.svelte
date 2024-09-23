@@ -10,7 +10,9 @@
   export let is_loading = false;
 
   function onTBodyClick(e) {
-    if (e.target.tagName === 'TD' && e.target.className !== 'actions') {
+    if (e.target.tagName === 'TD' &&
+      !e.target.closest('td').classList.contains('actions')
+    ) {
       navigator.clipboard
         .writeText(e.target.innerText)
         .then(() => {
@@ -48,18 +50,20 @@
           <td>{user['username']}</td>
           <td>{new Date(user['created_at']).toLocaleString()}</td>
           <td class="actions" data-id={user['id']}>
-            <Button
-              class="actions-button"
-              color="none"
-            >
-              <MaterialIcon type="edit" />
-            </Button>
-            <Button
-              class="actions-button"
-              color="none"
-            >
-              <MaterialIcon type="remove" />
-            </Button>
+            <div class='actions-buttons'>
+              <Button
+                class="actions-button"
+                color="none"
+              >
+                <MaterialIcon type="edit" />
+              </Button>
+              <Button
+                class="actions-button"
+                color="none"
+              >
+                <MaterialIcon type="remove" />
+              </Button>
+            </div>
           </td>
         </tr>
       {/each}
@@ -73,12 +77,26 @@
     max-width: 100px;
     word-break: break-all;
     cursor: pointer;
+    padding: 0.25rem;
+  }
+  tbody td:last-child {
+    cursor: default;
   }
   tbody.editable td {
     cursor: text;
   }
+  .actions-buttons {
+    display: flex;
+    gap: 0.125rem;
+  }
   :global(.actions-button) {
-    width: 32px; height: 32px;
-    padding: 0.1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    width: 24px; height: 24px;
+  }
+  :global(.actions-button svg) {
+    width: auto; height: 80%;
   }
 </style>

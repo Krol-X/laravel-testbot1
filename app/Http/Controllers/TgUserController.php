@@ -17,37 +17,45 @@ class TgUserController extends Controller
         return new TgUserCollection(TgUser::all());
     }
 
-    public function store(Request $request)
+    public function store(Request $request): TgUserResource|JsonResponse
     {
         $validated = Validator::make($request->all(), [
             'id' => 'required|integer',
-            'name' => 'required|string|max:255'
+            'firstname' => 'required|string|max:255',
+            'lastname' => 'required|string|max:255',
+            'username' => 'required|string|max:255'
         ]);
 
         if ($validated->fails()) {
             return response()->json($validated->errors(), 422);
         }
 
-        $user = TgUser::create($request);
+        $user = TgUser::create($request->only([
+            'id', 'firstname', 'lastname', 'username'
+        ]));
         return new TgUserResource($user);
     }
 
-    public function show(TgUser $user)
+    public function show(TgUser $user): TgUserResource
     {
         return new TgUserResource($user);
     }
 
-    public function update(Request $request, TgUser $user)
+    public function update(Request $request, TgUser $user): TgUserResource|JsonResponse
     {
         $validated = Validator::make($request->all(), [
-            'name' => 'sometimes|string|max:255'
+            'firstname' => 'sometimes|string|max:255',
+            'lastname' => 'sometimes|string|max:255',
+            'username' => 'sometimes|string|max:255'
         ]);
 
         if ($validated->fails()) {
             return response()->json($validated->errors(), 422);
         }
 
-        $user->update($request->only(['name']));
+        $user->update($request->only([
+            'firstname', 'lastname', 'username',
+        ]));
         return new TgUserResource($user);
     }
 

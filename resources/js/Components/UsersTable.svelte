@@ -12,8 +12,11 @@
   let edit_store = writable(null)
 
   function onTBodyClick(e) {
-    if (!e.target.closest('td')?.classList.contains('actions')) {
-      if ($edit_store && $edit_store.id == e.target.closest('tr').dataset?.id)
+    if (
+      !(e.target.tagName === 'svg' || e.target.closest('svg')) &&
+      !(e.target.classList.contains('act'))
+    ) {
+      if ($edit_store && ($edit_store.id == e.target.closest('tr')?.dataset?.id))
         return;
       navigator.clipboard
         .writeText(e.target.innerText)

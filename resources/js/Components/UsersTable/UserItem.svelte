@@ -35,22 +35,22 @@
   <EditableCell {user_data} {is_edited} {edit_store} key="lastname" />
   <EditableCell {user_data} {is_edited} {edit_store} key="username" />
   <td>{new Date(user_data['created_at']).toLocaleString()}</td>
-  <td class="actions">
-    <div class='actions-buttons'>
+  <td class="act">
+    <div class='act actions-buttons'>
       {#if $edit_store !== null}
         {#if is_edited}
-          <Button class="actions-button" color="none" on:click={onUndoClick}>
+          <Button class="act actions-button" color="none" on:click={onUndoClick}>
             <MaterialIcon type="no-register" />
           </Button>
-          <Button class="actions-button" color="none" on:click={onSaveClick}>
+          <Button class="act actions-button" color="none" on:click={onSaveClick}>
             <MaterialIcon type="save" />
           </Button>
         {/if}
       {:else}
-        <Button class="actions-button"color="none" on:click={onEditClick}>
+        <Button class="act actions-button"color="none" on:click={onEditClick}>
           <MaterialIcon type="edit" />
         </Button>
-        <Button class="actions-button" color="none" on:click={onRemoveClick}>
+        <Button class="act actions-button" color="none" on:click={onRemoveClick}>
           <MaterialIcon type="remove" />
         </Button>
       {/if}

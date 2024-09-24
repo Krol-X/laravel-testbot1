@@ -1,6 +1,6 @@
 <script context="module">
   import {writable} from 'svelte/store'
-  import {createFadedStore} from '@/utils/faded_store.js'
+  import {createFadedStore} from '@/stores/faded_store.js'
 
   export const layout = writable('');
   export const title = writable('');
@@ -10,8 +10,8 @@
 
 <script>
   import DefaultLayout from './Default.svelte'
-  import MouseTooltip from "@/Components/MouseTooltip.svelte";
-  import MouseMove from "@/Components/MouseMove.svelte";
+  import MouseTooltip from "@/components/MouseTooltip.svelte";
+  import MouseMove from "@/components/MouseMove.svelte";
 
   $: layout_component = (() => {
     switch ($layout) {

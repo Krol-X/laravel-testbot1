@@ -1,5 +1,5 @@
 <script context="module">
-  import {last_event, add_handler, remove_handler} from "@/Components/MouseMove.svelte";
+  import {last_event, add_handler, remove_handler} from "@/components/MouseMove.svelte";
 </script>
 
 <script>

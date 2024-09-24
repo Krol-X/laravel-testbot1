@@ -7,10 +7,6 @@
     Navbar,
     NavItem,
     NavLink,
-    Dropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem
   } from '@sveltestrap/sveltestrap';
 
   import {inertia} from '@inertiajs/svelte'
